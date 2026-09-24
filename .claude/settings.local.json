@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/tkwsean/Desktop/Work/School/InterviewPrep/**)",
+      "Read(//Users/tkwsean/Desktop/Work/School/**)"
+    ]
+  }
+}

@@ -1,0 +1,321 @@
+% FINM 34000 -- Probability and Stochastic Processes (compact cheatsheet)
+% Font size: change the \bodysize macro below (\tiny < \scriptsize < \footnotesize < \small).
+\documentclass[8pt,letterpaper]{extarticle}
+
+\usepackage[margin=0.35in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{multicol}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{microtype}
+
+\newcommand{\bodysize}{\footnotesize}   % <-- master body font size
+\newcommand{\cs}{{\color{red!75!black}$\bigstar$}\,} % cheatsheet-flagged item
+
+\setcounter{secnumdepth}{0}
+\pagestyle{empty}
+
+% --- tiny headings -----------------------------------------------------
+\titleformat{\section}{\normalfont\small\bfseries}{}{0pt}{}
+\titlespacing*{\section}{0pt}{1.1ex plus .2ex}{0.3ex}
+\titleformat{\subsection}{\normalfont\bodysize\bfseries}{}{0pt}{}
+\titlespacing*{\subsection}{0pt}{0.7ex plus .1ex}{0.2ex}
+\titleformat{\subsubsection}{\normalfont\bodysize\itshape}{}{0pt}{}
+\titlespacing*{\subsubsection}{0pt}{0.5ex}{0.1ex}
+
+% --- tight lists -------------------------------------------------------
+\setlist[itemize,1]{label=$\bullet$,leftmargin=0.9em,labelsep=0.3em,
+  topsep=1pt,itemsep=0.4pt,parsep=0pt,partopsep=0pt}
+\setlist[itemize,2]{label=--,leftmargin=0.8em,labelsep=0.25em,
+  topsep=0.4pt,itemsep=0.2pt,parsep=0pt,partopsep=0pt}
+
+% --- tight math --------------------------------------------------------
+\setlength{\abovedisplayskip}{1.5pt}
+\setlength{\belowdisplayskip}{1.5pt}
+\setlength{\abovedisplayshortskip}{0.5pt}
+\setlength{\belowdisplayshortskip}{0.5pt}
+\setlength{\jot}{1.5pt}
+
+\setlength{\columnsep}{11pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+
+\begin{document}
+\bodysize\raggedright
+
+{\cs = flagged as cheatsheet material.}
+
+\begin{multicols}{2}
+
+%======================================================================
+\section{Revision}
+%======================================================================
+\begin{itemize}
+  \item \cs Exponential distribution: $f(t)=\lambda e^{-\lambda t},\ t\ge 0$
+  \item \cs Variance: $\mathrm{Var}(X)=E[X^2]-\big(E[X]\big)^2$
+  \item Expectation of cross-product terms tends to be $0$: $\mathbb{E}(X_{i,j})$
+  \item \cs To show the random walk does not return to $0$ infinitely often ($V$ = count of returns to $0$, $E(N)$ = expected number of returns):
+    \[ V=\sum_{n=1}^{\infty}\mathbf{1}\{S_{2n}=0\},\ \ E[N]=\sum_{n=1}^{\infty}P(S_{2n}=0)=\sum_{n=1}^{\infty}a_n<\infty \]
+  \item \cs Geometric: $P\{Y=k\}=(1-p)^{k-1}p$, $E[Y]=\frac{1}{p}$
+  \item How to show optional stopping time? If given a condition, flip the logic; apply the flipped logic to $X_1,\dots,X_{T-1}$, but the original logic to $X_T$.
+  \item \cs $X_1 \perp X_2 \Rightarrow E[X_1X_2]=E[X_1]E[X_2]$
+  \item \cs \textbf{Stopping time:} $\{T=n\}$ is $\mathcal{F}_n$-measurable --- you can tell whether you stopped at time $n$ using only information available at time $n$, no peeking at the future.
+  \item \cs OST to get the probability that $S_n$ ever reaches $X$:
+    \begin{itemize}
+      \item $\text{lower bd} < M_{n\wedge T} < \text{upper bd}$
+      \item By OST $\mathbb{E}[M_T]=\mathbb{E}[M_0]$; find this expected value:
+        \[ E[M_T]=(\text{val if }T<\infty)p+(\text{val if }T=\infty)(1-p) \]
+      \item Replace the two values with the bounds.
+    \end{itemize}
+  \item \cs \textbf{Transient} --- may not come back, waiting time unsure. \textbf{Null recurrent} --- guaranteed to come back, waiting time infinite. \textbf{Positive recurrent} --- guaranteed to come back, waiting time finite.
+  \item \cs Geometric progression: $\sum_{k=0}^{n-1}r^k=\frac{r^n-1}{r-1}$, so $\sum_{k=1}^{n}2^k=2(2^n-1)=2^{n+1}-2$
+  \item \cs Alternative view of $\pi P=\pi$: $\ \pi(j)=\sum_i \pi(i)p(i,j)$
+  \item \cs Green's function matrix $G(x,y)$ = expected number of visits, starting from $x$ and passing $y$, before being absorbed per the question's requirements.
+  \item Probability from the Green's function matrix: read the row of $G$ per the question. Identify the correct column by choosing the state that can go to the absorbing state directly. Identify the transition from $y$ in $G(x,y)$ to the destination via $\Pr(y,\text{dest})$ (stated in the question!). Hence choose the specific $G(x,y)$, then multiply $G(x,y)\times\Pr(y,\text{dest})$.
+  \item Conditions for a generator: off-diagonal entries $\ge 0$; diagonal entries $\le 0$; each row sums to $0$.
+  \item \cs Counterexamples for martingale assumptions: see table below.
+\end{itemize}
+
+\end{multicols}
+
+% ---------------- martingale counterexample table (full width) --------
+{\scriptsize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.1}
+\begin{tabularx}{\textwidth}{@{}r >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X l l@{}}
+\toprule
+\# & Example & Why it's a martingale & Why it's square integrable & Converges? & $E[M_\infty]=E[M_0]$? \\
+\midrule
+1  & \textbf{Coin-flip walk} $S_n$ (or $1+S_n$) & Next step has mean $0$ & $E[S_n^2]=n$ & No & n/a \\
+2  & $\mathbf{S_n^2-n}$ & $E[S_{n+1}^2\mid\mathcal{F}_n]=S_n^2+1$ & $|M_n|\le n^2$ & No & n/a \\
+3  & \textbf{Stopped walk} $S_{n\wedge T}$, where $T$ = first hit of $1$ & A stopped martingale is a martingale & $|M_n|\le n$ & Yes, to $1$ & \textbf{No} ($1\neq0$) \\
+4  & \textbf{Gambler's ruin} $1+S_{n\wedge T}$, where $T$ = first hit of $0$ & Same as 3 & $0\le M_n\le 1+n$ & Yes, to $0$ & \textbf{No} ($0\neq1$) \\
+5  & \textbf{Doubling strategy} & Every bet is fair & $|W_n|\le 2^n$ & Yes, to $1$ & \textbf{No} ($1\neq0$) \\
+6  & \textbf{Product martingale} $X_1\cdots X_n$ with $E[X]=1$ (e.g.\ $\times5$ or $\div5$, your Q3) & $E[M_{n+1}\mid\mathcal{F}_n]=M_n E[X]=M_n$ & $E[M_n^2]=(E[X^2])^n$ & Yes, to $0$ & \textbf{No} ($0\neq1$) \\
+7  & \textbf{Exponential} $r^{S_n}$ for a biased walk (your Q4) & $E[r^X]=1$ by the choice of $r$ & $|M_n|\le r^{-n}$ & Yes, to $0$ & \textbf{No} \\
+8  & \textbf{Constant} $M_n=c$ & Trivial & $c^2<\infty$ & Yes & Yes \\
+9  & \textbf{Two-barrier stopped walk} (stop at $0$ or $7$, as in Q4) & Stopped martingale & Bounded between the barriers & Yes & \textbf{Yes} (that's OST) \\
+10 & \textbf{Doob martingale} $M_n=E[Y\mid\mathcal{F}_n]$, with $E[Y^2]<\infty$ & Tower property & $E[M_n^2]\le E[Y^2]$ for all $n$ & Yes & Yes \\
+\bottomrule
+\end{tabularx}}
+
+\begin{multicols}{2}
+
+%======================================================================
+\section{Lecture 1}
+%======================================================================
+\begin{itemize}
+  \item If $m<n$: $\ \mathbb{E}\big[\mathbb{E}(Y\mid\mathcal{F}_n)\mid\mathcal{F}_m\big]=\mathbb{E}[Y\mid\mathcal{F}_m]$
+  \item Linearity: $\ \mathbb{E}[a+bX\mid\mathcal{F}_t]=a+b\,\mathbb{E}[X\mid\mathcal{F}_t]$
+  \item If $Z$ is $\mathcal{F}_n$-measurable: $\ \mathbb{E}(ZY\mid\mathcal{F}_n)=Z\,\mathbb{E}(Y\mid\mathcal{F}_n)$
+  \item Standardizing the probability of a random walk:
+    \begin{itemize}
+      \item $\mathbb{E}(X_1)=\cdots=\mathbb{E}(X_n)=0$, $\operatorname{Var}(X_1)=\cdots=\operatorname{Var}(X_n)=1$
+      \item $S_n=X_1+\cdots+X_n \Rightarrow \mathbb{E}(S_n)=0$ and
+        \[ \operatorname{Var}(S_n)=\operatorname{Var}(X_1)+\cdots+\operatorname{Var}(X_n)=\underbrace{1+\cdots+1}_{n\text{ times}}=n \]
+      \item \textbf{NOTE:} $|S_n|\sim\sqrt{n}$, since $\sigma=\sqrt{\operatorname{Var}(S_n)}=\sqrt{n}$
+      \item Hence $\ \lim_{n\to\infty}\Pr\left\{a\le \frac{S_n}{\sqrt{n}}\le b\right\}=\int_a^b \frac{1}{\sqrt{2\pi}}e^{-x^2/2}dx$
+    \end{itemize}
+  \item \textbf{Tower property:} if $m<n$, $\ E\big[E[Y\mid\mathcal{F}_n]\,\big|\,\mathcal{F}_m\big]=E[Y\mid\mathcal{F}_m]$
+  \item If $\mathcal{F}_n$ has no useful information about $Y$: $\ E[Y\mid\mathcal{F}_n]=\mathbb{E}[Y]$
+  \item Probability a random walk returns to the origin: $\ \mathbb{P}\{S_{2n}=0\}\sim\frac{1}{\sqrt{\pi n}}$
+  \item Expected number of steps from the origin until hitting $-N$ or $N$:
+    \[ e(k)=1+\tfrac12 e(k-1)+\tfrac12 e(k+1),\ k=-(N-1),\dots,N-1 \]
+    with solution $e(k)=(N+k)(N-k)=N^2-k^2$
+  \item \cs Probability of returning to the origin in $d$ dimensions:
+    \[ \mathbb{P}\{S_{2n}=0\}\sim\frac{c_d}{n^{d/2}},\qquad c_d=\left(\frac{d}{\pi}\right)^{d/2}2^{\,1-d} \]
+    The walker returns to all points finitely often and, if $n$ is large enough, will not return (transient). The walker returns to all points infinitely often when $d=1$ or $2$ (recurrent).
+\end{itemize}
+
+%======================================================================
+\section{Lecture 2}
+%======================================================================
+\begin{itemize}
+  \item 3 types of probability transition matrix: absorbing boundary; reflecting boundary; partially reflecting boundary (sometimes the walker stays at the boundary, other times it leaves).
+  \item \cs Properties of an irreducible Markov chain:
+    \begin{itemize}
+      \item Aperiodic: $\ \lim_{n\to\infty}p_n(x,y)=\pi(y)$
+      \item Periodic: $\ \lim_{n\to\infty}\frac{1}{n}\sum_{j=1}^{n}p_j(x,y)=\pi(y)$
+    \end{itemize}
+  \item Positive vs.\ null recurrent: \textbf{positive} --- solving for the invariant probability (probability vector) gives a solution; \textbf{null} --- there is no solution.
+\end{itemize}
+
+%======================================================================
+\section{Lecture 3}
+%======================================================================
+\begin{itemize}
+  \item \textbf{Martingale:} if $m<n$, $E[M_n\mid\mathcal{F}_m]=M_m$; equivalently $E[M_{n+1}\mid\mathcal{F}_n]=M_n$
+  \item Martingale holds in finite time but fails in infinite time:
+    \begin{itemize}
+      \item Discrete stochastic integral example: the bet keeps doubling as long as the player loses via tails; the player wins (game stops) at the first head.
+      \item Short term $\mathbb{E}[M_T]=\mathbb{E}[M_0]$. Eventually, with probability $1$ the player wins, hence EV is $+1$.
+    \end{itemize}
+  \item Rationale behind optional sampling/stopping:
+    \begin{itemize}
+      \item Same example: bet something from the start until $T$, then bet nothing after $T$.
+      \item As long as $T<n$ the martingale holds. If $T>n$ the player keeps losing and we are unsure if he wins, so the martingale may not hold.
+    \end{itemize}
+\end{itemize}
+
+%======================================================================
+\section{Problem Set 1}
+%======================================================================
+\subsection{Conditional Probability}
+\begin{itemize}
+  \item \textbf{Marginal distribution:} e.g.\ $\Pr(X=i)$, ignoring the other random variables ($Y$, $Z$, \dots).
+  \item Given a 2D probability matrix (row $=X$, column $=Y$), find $E(Y\mid X=1)$:
+    \[ \begin{pmatrix} .1&.1&0&.2\\ .1&.05&.05&0\\ .1&.1&.1&.1 \end{pmatrix} \]
+    $\big((0.1)(1)+(0.1)(2)+(0)(3)+(0.2)(4)\big)/\Pr(X=1)$
+  \item $\mathbb{E}\big[\mathbb{E}(X\mid Y)\big]=\sum_{i=1}^{n}\mathbb{E}(X\mid Y=i)\Pr(Y=i)$
+\end{itemize}
+
+\subsection{Random Walk (Symmetric and Asymmetric)}
+\begin{itemize}
+  \item \cs Probability of starting at the origin and returning to the origin --- use the binomial theorem formula: $\ u_{2n}=\binom{2n}{n}p^nq^n$
+  \item \cs Show it does not return to the origin often: impose a limit on the binomial formula to show it converges (reaches a value $<\infty$):
+    \[ \begin{aligned}
+      {}^{n}C_{r} &= \frac{n!}{r!\,(n-r)!} \\
+      n! &\sim \sqrt{2\pi}\, n^{\,n+\frac12} e^{-n} \\
+      (2n)! &\sim \sqrt{2\pi}\, (2n)^{\,2n+\frac12} e^{-2n} \\
+      \sum_{n\ge1}\frac{1}{n^p} &= \infty \quad\text{iff}\quad p\le 1
+    \end{aligned} \]
+  \item A random walk does not return to the origin if the total number of steps is odd.
+\end{itemize}
+
+\subsection{Symmetric Random Walk}
+\begin{itemize}
+  \item Standardize to a standard normal: $\mathbb{E}(S_n)=0$, $\operatorname{Var}(S_n)=n$, so s.d.\ of $S_n=\sqrt{n}$; by CLT $S_n/\sqrt{n}\sim N(0,1)$.
+\end{itemize}
+
+\subsubsection{Gambler's Ruin}
+\begin{itemize}
+  \item Probability of hitting $0$ or $N$ starting from $A$, without touching $A$ midway:
+    \begin{itemize}
+      \item Case 1: start $A$, end $N$. Boundaries $A,N$; total width $N-A$; probability of a step up to $A+1$ is $1/(N-A)$.
+      \item Case 2: start $A$, end $0$. Boundaries $0,A$; total width $A$; probability of a step down to $A-1$ is $1/A$.
+      \item Both cases occur w.p.\ $0.5$ by symmetry: $\ 0.5\cdot\frac{1}{N-A}+0.5\cdot\frac{1}{A}$
+    \end{itemize}
+  \item Expected value of the walk reaching $A$ before hitting $0$ or $N$, starting from $A$:
+    \begin{itemize}
+      \item Same two cases as above, giving $p=0.5\cdot\frac{1}{N-A}+0.5\cdot\frac{1}{A}$
+      \item By the geometric distribution, it asks ``how many coin flips (or passes through $A$) before escaping to either boundary?'' Hence $1/p$.
+    \end{itemize}
+  \item Expected value of the walk reaching $B$ before hitting $0$ or $N$, starting from $A$:
+    \begin{itemize}
+      \item Part 1: probability of starting at $A$ and ending at $B$. Visualize boundaries $0$ and $B$, ignore $N$ for now: $A/B$.
+      \item Part 2: probability of starting at $B$ and ending at $0$ or $N$. Case 1: boundaries $B,N$, width $N-B$, step up $1/(N-B)$. Case 2: boundaries $0,B$, width $B$, step down $1/B$. By symmetry $0.5\cdot\frac{1}{N-B}+0.5\cdot\frac{1}{B}$.
+      \item Overall: $\frac{A}{B}\left(0.5\cdot\frac{1}{N-B}+0.5\cdot\frac{1}{B}\right)$
+    \end{itemize}
+\end{itemize}
+
+%======================================================================
+\section{Problem Set 2}
+%======================================================================
+\subsection{Markov Chain}
+\begin{itemize}
+  \item Aperiodic / irreducible, and proving both at once:
+    \begin{itemize}
+      \item \textbf{Aperiodic} = (for an irreducible chain) some diagonal entry is non-zero, i.e.\ a self-loop $p(i,i)>0$ exists, so the period is 1.
+      \item \textbf{Irreducible} = for all $i,j$ it is possible to go from $i$ to $j$ and from $j$ to $i$.
+      \item All entries in the transition probability matrix are non-zero.
+    \end{itemize}
+  \item \textbf{Invariant probability / probability vector:} if the transition matrix is aperiodic and irreducible then $\bar{\pi}P=\bar{\pi}$ applies; each entry of $\bar{\pi}$ is the fraction of time spent in that state.
+  \item \textbf{Bayes:} $P(A\mid B)=\frac{P(B\mid A)P(A)}{P(B)}$ --- useful when the conditional probability is such that condition $B$ happens at a later time.
+  \item Aggregate probability of 3 transitions from $A$ to $C$: multiply the transition matrix by itself 3 times, then read the row/column for $A$ and $C$.
+  \item Expected time from state $S$ back to state $S$: from the invariant probability, find the probability for state $S$ and take the inverse.
+  \item Expected number of visits to $B$, starting from $A$, ending at $C$: Green's function. Rearrange rows/columns so $B$ is the very first entry. Make $B$ absorbing by setting its probability to $1$ in that row only (that column is unaffected). Identify $Q$ --- the submatrix with no rows or columns touching $B$. Solve $G=(I-Q)^{-1}$. $G_{ij}$ is the expected number of visits to $j$ ($B$) starting from $i$ ($A$) before ending at $C$.
+  \item Expected number of visits to $B$ or $B'$, starting from $A$, ending at $C$: as above but put $B$ and $B'$ in the first and second diagonal entries and make each absorbing. $Q$ excludes all rows/columns touching $B$ or $B'$. Solve $G=(I-Q)^{-1}$, sum all columns in each row, and read the row for starting state $A$.
+  \item Expected time from state $A$ to state $B$:
+    \begin{itemize}
+      \item \textbf{Method 1:} green book / interview prep method --- solve the system of linear equations.
+      \item \textbf{Method 2:} Green's function --- put $B$ first, make it absorbing, form $Q$, solve $G=(I-Q)^{-1}$, sum all columns in each row, read the row for $A$.
+    \end{itemize}
+  \item \textbf{Doubly stochastic:} every row \emph{and} every column of the transition matrix sums to $1$ (then the uniform $\pi$ is invariant).
+\end{itemize}
+
+%======================================================================
+\section{Problem Set 3}
+%======================================================================
+\subsection{Polya's Urn???}
+
+\subsection{Martingale}
+\begin{itemize}
+  \item \cs What is a martingale / how to prove a random walk is one:
+    \begin{itemize}
+      \item Sequence $X_1\dots X_n$ associated with $\mathcal{F}_n$; both a sub- and super-martingale.
+      \item $\mathbb{E}[M_{n+1}\mid\mathcal{F}_n]=M_n$
+      \item There is $\mathcal{F}$-measurability.
+      \item $\text{for }\forall j,\ \mathbb{E}|M_j|<\infty$
+    \end{itemize}
+  \item \textbf{Sub-martingale:} $\mathbb{E}[M_{n+1}\mid\mathcal{F}_n]\ge M_n$. \textbf{Super-martingale:} $\mathbb{E}[M_{n+1}\mid\mathcal{F}_n]\le M_n$.
+  \item Discrete stochastic integral and required steps:
+    \begin{itemize}
+      \item The summation of the martingale can be re-expressed as a summation of bets and the change in the random variable. A player cannot win a fair game with a betting strategy in a finite amount of time: $E[W_{n+1}\mid\mathcal{F}_n]=W_n$.
+      \item $B_n$ is $\mathcal{F}_{n-1}$-measurable.
+      \item Prove the bet is bounded by a constant: $|B_n|\le C_n$.
+    \end{itemize}
+  \item Proving stopping time:
+    \begin{itemize}
+      \item $\{T=n\}=\{X_1=\cdot,\ X_2=\cdot,\ \dots,\ X_n=\cdot\}$
+      \item $X_1$ to $X_{n-1}$ do not fulfill the condition, while $X_n$ fulfills it and the game stops.
+      \item It is not a stopping time when a random variable is outside of the information set.
+    \end{itemize}
+  \item Optional stopping theory:
+    \begin{itemize}
+      \item $M_{n\wedge T}$ is a martingale for any stopping time $T$.
+      \item Universal truth, applies no matter what: $\mathbb{E}[M_{n\wedge T}]=\mathbb{E}[M_0]$ for every fixed $n$.
+      \item If $T$ is bounded, use $M_{k\wedge T}=M_T$.
+      \item Is the stopped process bounded? Verify $\mathbb{E}[|M_{n\wedge T}|^2]\le C$, and check $\mathbb{P}(T<\infty)=1$ and $\mathbb{E}|M_T|<\infty$.
+      \item Not the above 2 bullets? Verify $\lim_n \mathbb{E}[|M_n|\mathbf{1}\{T>n\}]=0$, and check $\mathbb{P}(T<\infty)=1$ and $\mathbb{E}|M_T|<\infty$.
+      \item Therefore $\mathbb{E}[M_T]=\mathbb{E}[M_0]$ --- most important!
+    \end{itemize}
+\end{itemize}
+
+%======================================================================
+\section{Problem Set 4}
+%======================================================================
+\begin{itemize}
+  \item \cs \textbf{Martingale convergence theorem:} suppose $M_n$ is a martingale w.r.t.\ $\{\mathcal{F}_n\}$ and there exists $C<\infty$ such that $E[|M_n|]\le C$ for all $n$. Then there exists a random variable $M_\infty$ such that with probability one $\lim_{n\to\infty}M_n=M_\infty$. \textbf{Warning:} the theorem does \emph{not} give $E[M_\infty]=E[M_0]$.
+  \item \cs Martingale betting strategy:
+    \begin{itemize}
+      \item $P\{X_j=1\}=P\{X_j=-1\}=\tfrac12$; let $M_0=0$, $M_n=X_1+\cdots+X_n$
+      \item $W_n=\sum_{j=1}^{n}B_j\Delta M_j=\sum_{j=1}^{n}B_jX_j$, $W_0=0$
+      \item $B_1=1$ and for $j>1$: $\ B_j=2^{\,j-1}$ if $X_1=\cdots=X_{j-1}=-1$, $B_j=0$ otherwise.
+      \item $B_n$ is $\mathcal{F}_{n-1}$-measurable (the bet is placed before the flip is seen) and bounded by some $K_n<\infty$, so $W_n$ is a discrete stochastic integral and hence a martingale. In particular $E[W_n]=0$ for every $n$.
+      \item $W_n=1$ unless $X_1=\cdots=X_n=-1$; if all losses,
+        \[ W_n=-1-2-4-\cdots-2^{\,n-1}=-[2^n-1]=1-2^n \]
+        with $P\{\text{all losses}\}=2^{-n}$.
+      \item $E[W_n]=1\cdot[1-2^{-n}]-[2^n-1]\cdot 2^{-n}=0$
+    \end{itemize}
+  \item \cs Poisson: $P\{X=k\}=\frac{(\lambda t)^k e^{-\lambda t}}{k!}$, $\ E[N]=\mathrm{Var}(N)=\lambda t$
+  \item \cs Poisson mean waiting time for $k$ intervals: $\ k\,E[T_j]=\frac{k}{\lambda}$
+  \item \cs ``Poisson binomial'' --- probability that $x$ have arrived at $t=t_1$ and $x+k$ have arrived at $t=t_2$:
+    \[ \binom{x+k}{x}\left(\tfrac{t_1}{t_1+t_2}\right)^{x}\left(\tfrac{t_2}{t_1+t_2}\right)^{k} \]
+    \begin{itemize}
+      \item \textbf{DISCLAIMER:} only works for $\Pr(t=x\mid t=x+k)$, not $\Pr(t=x+k\mid t=x)$.
+      \item To solve $\Pr(t=x+k\,(A)\mid t=x\,(B))$, it is equivalent to solving $\Pr(t=k\,(A))$ because of the disjoint nature.
+    \end{itemize}
+  \item \cs Interpreting $P\{X_1(X_6-X_2)=0\}$: see it as 2 disjoint intervals $(0,1)$ and $(2,6)$; we want either to be $0$, hence a union:
+    \[ P\{X_1=0\}+P\{X_6-X_2=0\}-P\{X_1=0\}P\{X_6-X_2=0\} \]
+  \item \cs ``At most $k$ people arrived in $x$ hours'': $\ P\{X_x\le k\}=\sum_{j=0}^{k}P\{X_x=j\}$, then use the Poisson formula for each term.
+  \item Generator matrix from a continuous-time Markov chain, and mean time per state:
+    \begin{itemize}
+      \item List all the stated probabilities provided by the question.
+      \item For diagonal entries, set them so the entry plus the sum of the corresponding row entries equals $0$.
+      \item Mean time in each state $i$: $1/|\alpha(i,i)|$ (the diagonal entry is negative).
+    \end{itemize}
+  \item Continuous-time MC, expected time from state $i$ back to state $i$ (different from discrete time!): find the invariant probability ($\pi A=0$), then compute $1/(\pi(i)\,|\alpha(i,i)|)$.
+  \item \textbf{Square integrable martingale:} $M_n$ is square integrable if $\mathbb{E}[M_n^2]<\infty$ for each $n$.
+    \[ \mathbb{E}[M_n^2]=\mathbb{E}[M_0^2]+\sum_{j=1}^{n}\mathbb{E}\big[(M_j-M_{j-1})^2\big] \]
+    \[ \begin{aligned}
+      M_n^2 &= \Big[M_0+\sum_{j=1}^{n}(M_j-M_{j-1})\Big]^2 \\
+            &= M_0^2+\sum_{j=1}^{n}(M_j-M_{j-1})^2 \\
+            &\quad + \sum_{j\neq k}(M_j-M_{j-1})(M_k-M_{k-1})
+    \end{aligned} \]
+\end{itemize}
+
+\end{multicols}
+\end{document}
