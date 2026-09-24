@@ -315,8 +315,9 @@
   \item \cs Poisson: $P\{X=k\}=\frac{(\lambda t)^k e^{-\lambda t}}{k!}$, $\ E[N]=\mathrm{Var}(N)=\lambda t$
   \item \cs Poisson mean waiting time for $k$ intervals: $\ k\,E[T_j]=\frac{k}{\lambda}$
   \item \cs ``Poisson binomial'' --- probability that $x$ have arrived at $t=t_1$ and $x+k$ have arrived at $t=t_2$:
-    \[ \binom{x+k}{x}\left(\tfrac{t_1}{t_1+t_2}\right)^{x}\left(\tfrac{t_2}{t_1+t_2}\right)^{k} \]
+    \[ \binom{x+k}{x}\left(\tfrac{t_1}{t_2}\right)^{x}\left(\tfrac{t_2-t_1}{t_2}\right)^{k} \]
     \begin{itemize}
+      \item \textbf{DISCLAIMER:} needs $t_2>t_1$ --- $[0,t_1]$ must sit inside $[0,t_2]$, so each of the $x+k$ arrivals independently lands in $[0,t_1]$ w.p.\ $t_1/t_2$.
       \item \textbf{DISCLAIMER:} only works for $\Pr(t=x\mid t=x+k)$, not $\Pr(t=x+k\mid t=x)$.
       \item To solve $\Pr(t=x+k\,(A)\mid t=x\,(B))$, it is equivalent to solving $\Pr(t=k\,(A))$ because of the disjoint nature.
     \end{itemize}
