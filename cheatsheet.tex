@@ -239,7 +239,29 @@
 %======================================================================
 \section{Problem Set 3}
 %======================================================================
-\subsection{Polya's Urn???}
+\subsection{Polya's Urn}
+\textbf{Q.} Show that the distribution of $M_n$ is uniform on the set $\left\{\frac{1}{n+2},\frac{2}{n+2},\dots,\frac{n+1}{n+2}\right\}$. (Use mathematical induction: note it is obviously true for $n=0$, and show that if it is true for $n$ then it is true for $n+1$.)
+\begin{itemize}
+  \item WTS $M_n$'s distribution is uniform on $\left\{\frac{1}{n+2},\frac{2}{n+2},\dots,\frac{n+1}{n+2}\right\}$, where $M_n$ = fraction of red balls at the $n$-th stage.
+  \item Based on lectures: $R_0=G_0=1$, $\ R_n+G_n=n+2$, $\ M_n=\frac{R_n}{n+2}$, and
+    \[ \Pr\{R_{n+1}=R_n+1\mid R_n\}=\frac{R_n}{n+2} \]
+    where $R_n \equiv$ number of red balls after $n$ draws.
+  \item \textbf{Base case} $n=0$: urn contains 1 red, 1 green, $\therefore R_0=1$ with probability $1$ --- uniform on $\{1\}$.
+  \item \textbf{Inductive step:} assume $R_n$ is uniform on $\{1,2,3,\dots,n+1\}$. To get $k$ reds after the next draw:
+    \begin{itemize}
+      \item \#1: hold $k-1$ red $\therefore$ draw red --- there will be $k-1$ red (b/f draw).
+      \item \#2: hold $k$ reds \& draw green --- there will be $n+2-k$ green (b/f draw).
+    \end{itemize}
+  \item $\therefore$
+    \[ \begin{aligned}
+      \Pr\{R_{n+1}=k\} &= \Pr\{R_n=k-1\}\tfrac{k-1}{n+2}+\Pr\{R_n=k\}\tfrac{n+2-k}{n+2} \\
+      &= \underbrace{\tfrac{1}{n+1}}_{\text{current red}}\cdot\underbrace{\tfrac{k-1}{n+2}}_{\text{draw red}}
+       + \underbrace{\tfrac{1}{n+1}}_{\text{current red}}\cdot\underbrace{\tfrac{n+2-k}{n+2}}_{\text{draw green}} \\
+      &= \tfrac{1}{n+1}\cdot\tfrac{n+1}{n+2} \;=\; \tfrac{1}{n+2}
+    \end{aligned} \]
+  \item $\therefore R_{n+1}$ is uniform on $\{1,\dots,n+2\}$. $\blacksquare$
+\end{itemize}
+
 
 \subsection{Martingale}
 \begin{itemize}
@@ -315,6 +337,48 @@
             &= M_0^2+\sum_{j=1}^{n}(M_j-M_{j-1})^2 \\
             &\quad + \sum_{j\neq k}(M_j-M_{j-1})(M_k-M_{k-1})
     \end{aligned} \]
+\end{itemize}
+
+%======================================================================
+\section{Worked Problems}
+%======================================================================
+\subsection{Exercise 6 --- infinite chain with Poisson jump from $0$}
+\textbf{Q.} Infinite Markov chain with state space $\{0,1,2,\dots\}$: if in state $j>0$ it moves to $j-1$; if in state $0$, a Poisson random variable with mean $1$ is sampled and one moves to that state, i.e.\ $p(0,k)=e^{-1}\frac{1}{k!}$. Suppose $X_0=0$. (1) What is the expected number of steps until we return to $0$ for the first time? (2) Show this is a positive recurrent chain and give the invariant probability $\pi$.
+\begin{itemize}
+  \item \textbf{(1)} $E(\text{return to }0\mid\text{start from }0)=1+k$, where the $1$ is the jump to $k$ and the $k$ is going from $k,k-1,\dots,1$ ($k$ times).
+  \item However, since the mean of $k$ is the mean of the Poisson distribution, $k=1$:
+    \[ \therefore E(\cdot)=1+(1)=2 \quad \blacksquare \]
+  \item \textbf{(2a)} WTS the recurrence. First, WTS irreducible:
+    \begin{itemize}
+      \item From $0$, I can jump to any state $k$ since $p(0,k)=e^{-1}/k!>0$.
+      \item I can go from state $k$ to $k-1$, $k-2$, \dots
+    \end{itemize}
+  \item Since $E(\text{return to }0\mid\text{start from }0)=2<\infty$ \& the chain is irreducible, the recurrence spreads to $\forall$ states.
+  \item \textbf{(2b)} Want to find $\pi$:
+    \[ \pi=\frac{\text{avg num.\ of visits to } j \text{ during one trip from } 0}{\text{average length of trip}}
+        =\frac{\Pr(k\ge j)}{2}=\frac{1}{2}\sum_{k\ge j}\frac{e^{-1}}{k!} \quad \blacksquare \]
+\end{itemize}
+
+\subsection{Exercise 2 --- martingale betting strategy}
+\textbf{Q.} Consider the martingale betting strategy of Section 5. Let $W_n$ be the ``winnings'' at time $n$, which for positive $n$ equals either $1$ or $1-2^n$. (1) Is $W_n$ a square integrable martingale? (2) If $\Delta_n=W_n-W_{n-1}$, what is $\mathbb{E}[\Delta_n^2]$? (3) What is $\mathbb{E}[W_n^2]$? (4) What is $E(\Delta_n^2\mid\mathcal{F}_{n-1})$?
+\begin{itemize}
+  \item \textbf{(1)} P\&L and probability:
+    \[ W_n=\begin{cases} +1 & 1-2^{-n} \\ 1-2^n & 2^{-n} \end{cases} \]
+    \[ E[W_n^2]=(1)^2(1-2^{-n})+(1-2^n)^2\,2^{-n}<\infty \]
+    $\therefore$ \checkmark\ square-integrable. $\blacksquare$
+  \item \textbf{(2)} $\Delta_n=W_n-W_{n-1}$, want $E(\Delta_n^2)$. $\Delta_n\neq 0$ happens when $n-1$ coin tosses are lost and the wallet bets $2^{\,n-1}$, which happens with probability $\frac{1}{2^{\,n-1}}$:
+    \[ E(\Delta_n^2)=\left(2^{\,n-1}\right)^2\times\left[\tfrac{1}{2^{\,n-1}}\right]=2^{\,n-1} \quad \blacksquare \]
+  \item \textbf{(3)} Want $E[W_n^2]$:
+    \[ E[W_n^2]=E[W_0^2]+\sum_{j=1}^{n}E\big[\Delta_j^2\big]=0+\sum_{j=1}^{n}2^{\,j-1}=2^n-1 \quad \blacksquare \]
+  \item \textbf{(4)} Want $E(\Delta_n^2\mid\mathcal{F}_{n-1})$. Note $E(\Delta_n\mid\mathcal{F}_{n-1})=0$ by the definition of a martingale, so
+    \[ \operatorname{Var}(\Delta_n\mid\mathcal{F}_{n-1})=E(\Delta_n^2\mid\mathcal{F}_{n-1})-\underbrace{\big[E(\Delta_n\mid\mathcal{F}_{n-1})\big]^2}_{0} \]
+    \begin{itemize}
+      \item $\Delta_n=W_n-W_{n-1}=B_nX_n$, so $\Delta_n^2=B_n^2X_n^2=B_n^2$ (since $X\in\{-1,1\}$, $X_n^2=1$).
+      \item $B_n$ is $\mathcal{F}_{n-1}$-measurable $\therefore B_n^2$ is also known at $t=n-1$.
+      \item $\therefore E(\Delta_n^2\mid\mathcal{F}_{n-1})=E[B_n^2\mid\mathcal{F}_{n-1}]=B_n^2$
+    \end{itemize}
+  \item With $B_n=\begin{cases}2^{\,n-1} & \text{if } X_1=\dots=X_{n-1}=-1\\ 0 & \text{otherwise}\end{cases}$ and $B_n^2=\begin{cases}4^{\,n-1} & \text{if } X_1=\dots=X_{n-1}=-1\\ 0 & \text{otherwise}\end{cases}$
+    \[ \therefore E(\Delta_n^2\mid\mathcal{F}_{n-1})=4^{\,n-1}\cdot\mathbf{1}\{X_1=\dots=X_{n-1}=-1\} \quad \blacksquare \]
 \end{itemize}
 
 \end{multicols}
